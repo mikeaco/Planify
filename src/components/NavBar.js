@@ -25,12 +25,16 @@ function NavBar() {
                     menuItemStyles={{
                         button: ({ level, active, disabled }) => {
                             // only apply styles on first level elements of the tree
-                            if (level === 0)
+                            if (level === 0){
                                 return {
-                                    color: disabled ? '#f5d9ff' : '#ffffff',
-                                    backgroundColor: active ? '#eecef9' : undefined,
-                                    
+                                  color: disabled ? "#f5d9ff" : "#ffffff",
+                                  backgroundColor: active
+                                    ? "#eecef9"
+                                    : undefined,
+                                  ":hover": { backgroundColor: "#8f9094" },
                                 };
+                            }
+
                         },
                     }}
                 >
