@@ -6,11 +6,7 @@ import { getAuth } from "firebase/auth";
 import {
   getFirestore,
   collection,
-  addDoc,
-  doc,
   onSnapshot,
-  updateDoc,
-  arrayUnion,
 } from "firebase/firestore";
 import { Link, useNavigate } from "react-router-dom";
 

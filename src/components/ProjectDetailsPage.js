@@ -11,13 +11,68 @@ import {
 } from "firebase/firestore";
 import app from "./firebaseconfig";
 import { FaTrash } from "react-icons/fa";
+import NavBar from "./NavBar";
+import { ProSidebarProvider } from "react-pro-sidebar";
+
+
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin:1em;
+`;
+
+const DeleteButton = styled.button`
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+`;
+
+
+
+const ProjectContainer = styled.div`
+  flex-grow: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  
+`;
 
 const PageContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
+  height: 100vh;
 `;
+
+
+
+const TopHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+`;
+
+
+
+///////
+
+// const PageContainer = styled.div`
+//   display: flex;
+// `;
+
+// const ProjectContainer = styled.div`
+//   flex-grow: 1;
+//   padding: 20px;
+//   overflow-y: auto;
+// `;
 
 const Title = styled.h2`
   font-size: 24px;
@@ -27,7 +82,6 @@ const Title = styled.h2`
 
 const Description = styled.p`
   color: #333333;
-  text-align: center;
 `;
 
 const TaskList = styled.ul`
@@ -36,15 +90,6 @@ const TaskList = styled.ul`
   margin-top: 20px;
   width: 100%;
 `;
-
-
-
-const TaskItemWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
 
 
 const TaskItem = styled.li`
@@ -85,17 +130,6 @@ const TaskDescription = styled.p`
 
 
 
-
-const DeleteButton = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #dc3545;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-`;
-
 const DeleteTaskButton = styled(DeleteButton)`
   margin-left: 10px;
 `;
@@ -111,17 +145,7 @@ const AddTaskButton = styled(Link)`
   border: none;
   border-radius: 5px;
   cursor: pointer;
-`;
-
-const GoHomeButton = styled(Link)`
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #ffffff;
-  text-decoration: none;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  
 `;
 
 const ModalContainer = styled.div`
@@ -173,27 +197,7 @@ const CancelButton = styled.button`
   cursor: pointer;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
 
-
-
-const DeleteConfirmationModal = ({ onDelete, onCancel }) => {
-  return (
-    <ModalContainer>
-      <ModalContent>
-        <h2>Confirmation</h2>
-        <p>Are you sure you want to delete this project?</p>
-        <ButtonContainer>
-          <CancelButton onClick={onCancel}>Cancel</CancelButton>
-          <DeleteButton onClick={onDelete}>Delete</DeleteButton>
-        </ButtonContainer>
-      </ModalContent>
-    </ModalContainer>
-  );
-};
 
 const ProjectDetailsPage = () => {
   const db = getFirestore(app);
@@ -280,60 +284,80 @@ const ProjectDetailsPage = () => {
   }
 
   return (
-    <PageContainer>
-      <Title>{project.Title}</Title>
-      <Description>{project.Description}</Description>
-      <h3>Tasks:</h3>
-      <TaskList>
-        {project.Tasks.map((task, index) => (
-          <TaskItem key={task.id}>
-            <TaskContentWrapper>
+    <>
+      <PageContainer>
+        <ProSidebarProvider>
+          <NavBar />
+        </ProSidebarProvider>
+        <ProjectContainer>
+            <TopHeader>
               <div>
-                <TaskTitle>{task.Title}</TaskTitle>
-                <TaskDescription>{task.Description}</TaskDescription>
+                <Title>{project.Title}</Title>
+                <Description>{project.Description}</Description>
               </div>
-              <TaskStatus>
-                <select
-                  value={task.Status}
-                  onChange={(e) => handleStatusChange(index, e.target.value)}
-                >
-                  <option value="Unassigned">Unassigned</option>
-                  <option value="Assigned">Assigned</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Completed">Completed</option>
-                </select>
-              </TaskStatus>
-            </TaskContentWrapper>
-            <TaskActionsWrapper>
-              <DeleteTaskButton
-                onClick={() => handleDeleteTask(task.id, index)}
-              >
-                <FaTrash />
-              </DeleteTaskButton>
-            </TaskActionsWrapper>
-          </TaskItem>
-        ))}
-      </TaskList>
-      <AddTaskButton to={`/projects/${projectId}/add-task`}>
-        + Add Task
-      </AddTaskButton>
-      <DeleteButton onClick={handleDeleteProject}>Delete Project</DeleteButton>
-      <GoHomeButton to="/">Go Home</GoHomeButton>
-      {showDeleteConfirmation && (
-        <ModalContainer className="show">
-          <ModalContent className="show">
-            <h2>Confirmation</h2>
-            <p>Are you sure you want to delete this project?</p>
-            <ButtonContainer>
-              <CancelButton onClick={toggleDeleteConfirmation}>
-                Cancel
-              </CancelButton>
-              <DeleteButton onClick={confirmDeleteProject}>Delete</DeleteButton>
-            </ButtonContainer>
-          </ModalContent>
-        </ModalContainer>
-      )}
-    </PageContainer>
+              <ButtonWrapper>
+                <DeleteButton onClick={handleDeleteProject}>
+                  Delete Project
+                </DeleteButton>
+              </ButtonWrapper>
+            </TopHeader>
+          <h3>Tasks:</h3>
+          <TaskList>
+            {project.Tasks.map((task, index) => (
+              <TaskItem key={task.id}>
+                <TaskContentWrapper>
+                  <div>
+                    <TaskTitle>{task.Title}</TaskTitle>
+                    <TaskDescription>{task.Description}</TaskDescription>
+                  </div>
+                  <TaskStatus>
+                    <select
+                      value={task.Status}
+                      onChange={(e) =>
+                        handleStatusChange(index, e.target.value)
+                      }
+                    >
+                      <option value="Unassigned">Unassigned</option>
+                      <option value="Assigned">Assigned</option>
+                      <option value="In Progress">In Progress</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                  </TaskStatus>
+                </TaskContentWrapper>
+                <TaskActionsWrapper>
+                  <DeleteTaskButton
+                    onClick={() => handleDeleteTask(task.id, index)}
+                  >
+                    <FaTrash />
+                  </DeleteTaskButton>
+                </TaskActionsWrapper>
+              </TaskItem>
+            ))}
+          </TaskList>
+          <ButtonContainer>
+            <AddTaskButton to={`/projects/${projectId}/add-task`}>
+              + Add Task
+            </AddTaskButton>
+          </ButtonContainer>
+          {showDeleteConfirmation && (
+            <ModalContainer className="show">
+              <ModalContent className="show">
+                <h2>Confirmation</h2>
+                <p>Are you sure you want to delete this project?</p>
+                <ButtonContainer>
+                  <CancelButton onClick={toggleDeleteConfirmation}>
+                    Cancel
+                  </CancelButton>
+                  <DeleteButton onClick={confirmDeleteProject}>
+                    Delete
+                  </DeleteButton>
+                </ButtonContainer>
+              </ModalContent>
+            </ModalContainer>
+          )}
+        </ProjectContainer>
+      </PageContainer>
+    </>
   );
 };
 

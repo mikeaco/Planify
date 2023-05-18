@@ -8,7 +8,7 @@ import {
 import HomePage from "./components/HomePage";
 import LoginPage from "./components/LoginPage";
 import RegistrationPage from "./components/RegistrationPage";
-import AccountPage from "./components/AccountPage";
+// import AccountPage from "./components/AccountPage";
 import NewProjectPage from "./components/NewProjectPage";
 import ProjectDetailsPage from "./components/ProjectDetailsPage";
 import AddTaskPage from "./components/AddTaskPage";
@@ -50,7 +50,7 @@ const App = () => {
     <Router>
       <Routes>
         <Route
-          path="*"
+          path="/"
           element={
             <PrivateRoute>
               <Route index element={<HomePage />} />
@@ -59,14 +59,14 @@ const App = () => {
         />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegistrationPage />} />
-        <Route
+        {/* <Route
           path="/account/*"
           element={
             <PrivateRoute>
               <Route index element={<AccountPage />} />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
           path="/new-project"
           element={
@@ -91,6 +91,7 @@ const App = () => {
             </PrivateRoute>
           }
         />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );

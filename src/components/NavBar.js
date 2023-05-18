@@ -63,7 +63,7 @@ const NavBar = () => {
               }}
             >
               <MenuItem component={<Link to="/" />}>Home</MenuItem>
-              <MenuItem component={<Link to="/account" />}>My Account</MenuItem>
+              {/* <MenuItem component={<Link to="/account" />}>My Account</MenuItem> */}
             </Menu>
           </div>
           <div>

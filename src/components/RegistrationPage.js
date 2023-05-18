@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import firebase from "firebase/compat/app";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import styled, { keyframes } from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
@@ -88,6 +87,8 @@ const RegistrationPage = () => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        console.error(errorCode);
+        console.error(errorMessage)
         // ..
       });
 
